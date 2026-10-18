@@ -14,6 +14,9 @@ const venue = {
         balcony: { name: "Balcony", price: 24 }
     },
 
+    // How much the rows bend around the stage (0 = straight rows)
+    rowCurve: 0.25,
+
     // Sections from the stage to the back of the hall.
     // aisleAfter = seat number after which the centre aisle is placed.
     sections: [
@@ -99,4 +102,13 @@ function getCategory(categoryId) {
 
 function formatPrice(amount) {
     return venue.currency + amount;
+}
+
+// Returns how many pixels a seat is moved up towards the stage,
+// so that each row forms a curve. The middle seat stays at 0 and
+// seats further from the middle move up more.
+function getCurveOffset(seatNumber, seatsPerRow) {
+    const middle = (seatsPerRow + 1) / 2;
+    const distance = seatNumber - middle;
+    return Math.round(venue.rowCurve * distance * distance);
 }
