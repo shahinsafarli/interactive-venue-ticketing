@@ -20,27 +20,30 @@ cart with the **ADD TO CART** button.
 Total: **340 seats**. Every section has a centre aisle. Some seats are already
 sold and are shown as unavailable.
 
+The rows are slightly curved around the stage (like in a real theatre), so the
+seats at the ends of a row are a bit closer to the stage than the middle seats.
+
 ### Layout sketch
 
 ```
-                  +-----------------------+
-                  |         STAGE         |
-                  +-----------------------+
+                      +-----------------------+
+                      |         STAGE         |
+                      +-----------------------+
 
- Front Stalls     A     ########   ########
- (Premium)        D     ########   ########
+ Front Stalls (A-D)     ###                       ###
+ Premium                    #####   |   #####
 
- Middle Stalls    E    #########   #########
- (Standard)       J    #########   #########
+ Middle Stalls (E-J)   ####                         ####
+ Standard                   ######  |  ######
 
- Rear Stalls      K   ##########   ##########
- (Economy)        N   ##########   ##########
+ Rear Stalls (K-N)    #####                           #####
+ Economy                    #######  |  #######
 
- ------------------------ balcony ------------------------
- Balcony          P  ###########   ###########
- (Balcony)        S  ###########   ###########
+ ------------------------- balcony -------------------------
+ Balcony (P-S)       ######                             ######
+ Balcony                    ########  |  ########
 
- [Entrance Left]          aisle          [Entrance Right]
+ [Entrance Left]            centre aisle         [Entrance Right]
 ```
 
 ## Seat states
