@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand City Theatre – Tickets</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <h1>Grand City Theatre</h1>
+        <p>Pick your seats: click a seat to see its details, then add it to your cart.</p>
+    </header>
+
+    <main class="layout">
+        <!-- Venue map with navigation controls -->
+        <section class="venue-panel" aria-label="Venue map">
+            <div class="map-controls" aria-label="Map controls">
+                <button type="button" id="zoomInBtn" title="Zoom in">Zoom In +</button>
+                <button type="button" id="zoomOutBtn" title="Zoom out">Zoom Out −</button>
+                <button type="button" id="moveUpBtn" title="Move up">↑ Up</button>
+                <button type="button" id="moveDownBtn" title="Move down">↓ Down</button>
+                <button type="button" id="moveLeftBtn" title="Move left">← Left</button>
+                <button type="button" id="moveRightBtn" title="Move right">→ Right</button>
+                <button type="button" id="resetViewBtn" title="Reset and center view">Reset View</button>
+            </div>
+
+            <div class="map-viewport" id="mapViewport">
+                <div class="map-content" id="mapContent">
+                    <div class="stage">STAGE</div>
+                    <!-- Seats are generated from js/venue-data.js -->
+                    <div class="seat-map" id="seatMap"></div>
+                    <div class="entrances">
+                        <span>Entrance Left</span>
+                        <span>Entrance Right</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <h2>Legend</h2>
+                <ul class="legend-list">
+                    <li><span class="legend-box state-available"></span> Available</li>
+                    <li><span class="legend-box state-inspected"></span> Inspected</li>
+                    <li><span class="legend-box state-in-cart"></span> In cart</li>
+                    <li><span class="legend-box state-unavailable"></span> Unavailable</li>
+                </ul>
+                <h3>Price categories</h3>
+                <ul class="legend-list" id="priceLegend"></ul>
+            </div>
+        </section>
+
+        <!-- Seat details and cart -->
+        <aside class="side-panel">
+            <section class="panel seat-details" id="seatDetails">
+                <h2>Seat details</h2>
+                <p class="placeholder" id="detailsPlaceholder">Click a seat on the map to see its details.</p>
+                <dl class="details-list" id="detailsList" hidden>
+                    <dt>Section</dt>
+                    <dd id="detailSection">-</dd>
+                    <dt>Row</dt>
+                    <dd id="detailRow">-</dd>
+                    <dt>Seat</dt>
+                    <dd id="detailSeat">-</dd>
+                    <dt>Category</dt>
+                    <dd id="detailCategory">-</dd>
+                    <dt>Price</dt>
+                    <dd id="detailPrice">-</dd>
+                    <dt>Status</dt>
+                    <dd id="detailStatus">-</dd>
+                </dl>
+                <button type="button" class="btn-primary" id="addToCartBtn" disabled>ADD TO CART</button>
+                <p class="message" id="detailsMessage"></p>
+            </section>
+
+            <section class="panel cart" id="cart">
+                <h2>Your cart</h2>
+                <p class="placeholder" id="cartEmpty">Your cart is empty.</p>
+                <ul class="cart-list" id="cartList"></ul>
+                <p class="cart-total">Total: <strong id="cartTotal">€0</strong></p>
+            </section>
+        </aside>
+    </main>
+
+    <footer class="site-footer">
+        <p>Web &amp; Mobile I – Interactive Venue Ticketing System</p>
+    </footer>
+
+    <script src="js/venue-data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
