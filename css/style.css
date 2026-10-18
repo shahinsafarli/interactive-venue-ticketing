@@ -1,0 +1,224 @@
+/* ===== Colours and basic settings ===== */
+:root {
+    --bg: #f4f1ec;
+    --panel: #ffffff;
+    --text: #222222;
+    --muted: #6b6b6b;
+    --primary: #8b1e3f;
+    --primary-dark: #6a152f;
+    --border: #dddddd;
+    --stage: #3a3a3a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.4;
+}
+
+h1, h2, h3 {
+    margin-top: 0;
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* ===== Header and footer ===== */
+.site-header {
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: 20px 24px;
+}
+
+.site-header h1 {
+    margin-bottom: 4px;
+}
+
+.site-header p {
+    margin: 0;
+}
+
+.site-footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    padding: 16px;
+}
+
+/* ===== Main layout: map on the left, side panel on the right ===== */
+.layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    max-width: 1300px;
+    margin: 20px auto;
+    padding: 0 16px;
+}
+
+.venue-panel,
+.panel {
+    background-color: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ===== Map controls ===== */
+.map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.map-controls button {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: #fafafa;
+}
+
+.map-controls button:hover {
+    background-color: #eeeeee;
+}
+
+/* ===== Map viewport (the visible window of the map) ===== */
+.map-viewport {
+    position: relative;
+    height: 520px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: #fbfaf8;
+}
+
+.map-content {
+    padding: 20px;
+    transform-origin: center top;
+}
+
+.stage {
+    width: 60%;
+    margin: 0 auto 30px;
+    padding: 14px;
+    text-align: center;
+    letter-spacing: 6px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: var(--stage);
+    border-radius: 0 0 40px 40px;
+}
+
+.entrances {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+/* ===== Seat details ===== */
+.placeholder {
+    color: var(--muted);
+}
+
+.details-list {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 12px;
+    margin: 0 0 16px;
+}
+
+.details-list dt {
+    font-weight: bold;
+}
+
+.details-list dd {
+    margin: 0;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--primary);
+    color: #ffffff;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-dark);
+}
+
+.message {
+    min-height: 1.2em;
+    margin: 8px 0 0;
+    font-size: 0.9rem;
+    color: var(--primary);
+}
+
+/* ===== Cart ===== */
+.cart-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px;
+}
+
+.cart-total {
+    margin: 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 1.1rem;
+}
+
+/* ===== Responsive: stack panels on smaller screens ===== */
+@media (max-width: 900px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .map-viewport {
+        height: 420px;
+    }
+}
+
+@media (max-width: 500px) {
+    .site-header {
+        padding: 16px;
+    }
+
+    .site-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .map-controls button {
+        flex: 1 1 30%;
+        padding: 8px 4px;
+        font-size: 0.85rem;
+    }
+
+    .map-viewport {
+        height: 340px;
+    }
+}
