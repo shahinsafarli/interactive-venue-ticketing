@@ -31,21 +31,25 @@ function findSeat(seatId) {
     });
 }
 
-// Creates the row letter that is shown at the start and end of each row
-function createRowLabel(row) {
+// Creates the row letter that is shown at the start and end of each row.
+// offset moves the label up so it follows the curve of the row.
+function createRowLabel(row, offset) {
     const label = document.createElement("span");
     label.className = "row-label";
     label.textContent = row;
+    label.style.top = -offset + "px";
     return label;
 }
 
-// Creates one seat button
-function createSeatButton(seat) {
+// Creates one seat button.
+// Seats far from the middle of the row are moved up, so the row is curved.
+function createSeatButton(seat, seatsPerRow) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "seat cat-" + seat.category;
     button.textContent = seat.number;
     button.dataset.seatId = seat.id;
+    button.style.top = -getCurveOffset(seat.number, seatsPerRow) + "px";
     return button;
 }
 
@@ -66,14 +70,17 @@ function renderSeatMap() {
         title.textContent = section.name + " · " + category.name + " " + formatPrice(category.price);
         sectionDiv.appendChild(title);
 
+        // the row labels sit next to the first and last seat, so they use the same offset
+        const labelOffset = getCurveOffset(1, section.seatsPerRow);
+
         section.rows.forEach(function (row) {
             const rowDiv = document.createElement("div");
             rowDiv.className = "seat-row";
-            rowDiv.appendChild(createRowLabel(row));
+            rowDiv.appendChild(createRowLabel(row, labelOffset));
 
             for (let number = 1; number <= section.seatsPerRow; number++) {
                 const seat = findSeat(row + "-" + number);
-                rowDiv.appendChild(createSeatButton(seat));
+                rowDiv.appendChild(createSeatButton(seat, section.seatsPerRow));
 
                 // empty space for the centre aisle
                 if (number === section.aisleAfter) {
@@ -83,7 +90,7 @@ function renderSeatMap() {
                 }
             }
 
-            rowDiv.appendChild(createRowLabel(row));
+            rowDiv.appendChild(createRowLabel(row, labelOffset));
             sectionDiv.appendChild(rowDiv);
         });
 

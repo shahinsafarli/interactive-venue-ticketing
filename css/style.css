@@ -165,6 +165,12 @@ button:disabled {
     margin-bottom: 4px;
 }
 
+/* top is set in JavaScript to curve the rows */
+.seat,
+.row-label {
+    position: relative;
+}
+
 .row-label {
     width: 20px;
     font-size: 0.75rem;
