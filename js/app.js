@@ -3,6 +3,19 @@
 // All seats of the venue, created from the data model
 const seats = createSeatList();
 
+// Seat buttons by seat id, so a seat button can be updated quickly
+const seatButtons = {};
+
+// Id of the seat that is currently inspected (null = no seat selected)
+let inspectedSeatId = null;
+
+// Text shown for each seat state
+const stateNames = {
+    "available": "Available",
+    "in-cart": "In cart",
+    "unavailable": "Sold (unavailable)"
+};
+
 // Shows each price category with its price and number of seats in the legend
 function renderPriceLegend() {
     const legend = document.getElementById("priceLegend");
@@ -50,7 +63,65 @@ function createSeatButton(seat, seatsPerRow) {
     button.textContent = seat.number;
     button.dataset.seatId = seat.id;
     button.style.top = -getCurveOffset(seat.number, seatsPerRow) + "px";
+
+    // clicking a seat only inspects it, it does not add it to the cart
+    button.addEventListener("click", function () {
+        inspectSeat(seat.id);
+    });
+
+    seatButtons[seat.id] = button;
+    updateSeatButton(seat);
     return button;
+}
+
+// Returns the state of a seat: "available" or "unavailable"
+function getSeatState(seat) {
+    if (seat.unavailable) {
+        return "unavailable";
+    }
+    return "available";
+}
+
+// Updates the classes and the label of a seat button so it shows the right state
+function updateSeatButton(seat) {
+    const button = seatButtons[seat.id];
+    const state = getSeatState(seat);
+
+    button.className = "seat cat-" + seat.category + " " + state;
+    if (seat.id === inspectedSeatId) {
+        button.classList.add("inspected");
+    }
+
+    button.setAttribute("aria-label", "Row " + seat.row + ", seat " + seat.number + ", " + stateNames[state]);
+    button.title = "Row " + seat.row + ", seat " + seat.number;
+}
+
+// Selects a seat for inspection. Only one seat can be inspected at a time.
+function inspectSeat(seatId) {
+    const previousId = inspectedSeatId;
+    inspectedSeatId = seatId;
+
+    if (previousId !== null) {
+        updateSeatButton(findSeat(previousId));
+    }
+    updateSeatButton(findSeat(seatId));
+    showSeatDetails(findSeat(seatId));
+}
+
+// Fills the seat details panel with the data of the inspected seat
+function showSeatDetails(seat) {
+    const section = getSection(seat.sectionId);
+    const category = getCategory(seat.category);
+
+    document.getElementById("detailsPlaceholder").hidden = true;
+    document.getElementById("detailsList").hidden = false;
+
+    document.getElementById("detailSection").textContent = section.name;
+    document.getElementById("detailRow").textContent = seat.row;
+    document.getElementById("detailSeat").textContent = seat.number;
+    document.getElementById("detailCategory").textContent = category.name;
+    document.getElementById("detailPrice").textContent = formatPrice(category.price);
+    document.getElementById("detailStatus").textContent = stateNames[getSeatState(seat)];
 }
 
 // Builds the whole seat map from the venue data:
