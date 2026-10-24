@@ -99,6 +99,15 @@ function updateSeatButton(seat) {
 // Selects a seat for inspection. Only one seat can be inspected at a time.
 function inspectSeat(seatId) {
     const previousId = inspectedSeatId;
+
+    // clicking the inspected seat again deselects it
+    if (previousId === seatId) {
+        inspectedSeatId = null;
+        updateSeatButton(findSeat(seatId));
+        clearSeatDetails();
+        return;
+    }
+
     inspectedSeatId = seatId;
 
     if (previousId !== null) {
@@ -122,6 +131,26 @@ function showSeatDetails(seat) {
     document.getElementById("detailCategory").textContent = category.name;
     document.getElementById("detailPrice").textContent = formatPrice(category.price);
     document.getElementById("detailStatus").textContent = stateNames[getSeatState(seat)];
+
+    // ADD TO CART only works for available seats
+    const addButton = document.getElementById("addToCartBtn");
+    const message = document.getElementById("detailsMessage");
+
+    if (getSeatState(seat) === "available") {
+        addButton.disabled = false;
+        message.textContent = "";
+    } else {
+        addButton.disabled = true;
+        message.textContent = "This seat is already sold and cannot be added to the cart.";
+    }
+}
+
+// Empties the seat details panel when no seat is inspected
+function clearSeatDetails() {
+    document.getElementById("detailsPlaceholder").hidden = false;
+    document.getElementById("detailsList").hidden = true;
+    document.getElementById("addToCartBtn").disabled = true;
+    document.getElementById("detailsMessage").textContent = "";
 }
 
 // Builds the whole seat map from the venue data:
