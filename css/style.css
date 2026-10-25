@@ -82,6 +82,12 @@ button:disabled {
     padding: 16px;
 }
 
+/* without this the grid column grows to the full width of the seat map
+   and the panel goes outside the screen on phones */
+.venue-panel {
+    min-width: 0;
+}
+
 .side-panel {
     display: flex;
     flex-direction: column;
@@ -230,6 +236,12 @@ button:disabled {
 
 .seat:hover:not(:disabled) {
     transform: scale(1.15);
+}
+
+/* visible outline when moving between seats and buttons with the Tab key */
+button:focus-visible {
+    outline: 3px solid #1565c0;
+    outline-offset: 2px;
 }
 
 .seat.inspected,
