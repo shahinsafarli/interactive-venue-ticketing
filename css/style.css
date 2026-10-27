@@ -127,7 +127,9 @@ button:disabled {
     width: max-content;
     min-width: 100%;
     padding: 20px;
-    transform-origin: center top;
+    /* zoom and move are done with transform in JavaScript */
+    transform-origin: 0 0;
+    transition: transform 0.2s;
 }
 
 .stage {

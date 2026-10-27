@@ -198,5 +198,60 @@ function renderSeatMap() {
     });
 }
 
+// ===== Map navigation =====
+
+// Current view of the map: zoom level and position (in pixels)
+const view = {
+    zoom: 1,
+    x: 0,
+    y: 0
+};
+
+const MIN_ZOOM = 0.3;
+const MAX_ZOOM = 2;
+const ZOOM_STEP = 0.2;
+
+// Moves and scales the map content to match the current view
+function applyView() {
+    const mapContent = document.getElementById("mapContent");
+    mapContent.style.transform = "translate(" + view.x + "px, " + view.y + "px) scale(" + view.zoom + ")";
+
+    // the zoom buttons cannot go past the limits
+    document.getElementById("zoomInBtn").disabled = view.zoom >= MAX_ZOOM;
+    document.getElementById("zoomOutBtn").disabled = view.zoom <= MIN_ZOOM;
+}
+
+// Changes the zoom by the given amount and keeps the middle of the viewport in place
+function zoomMap(change) {
+    const viewport = document.getElementById("mapViewport");
+    const oldZoom = view.zoom;
+
+    let newZoom = Math.round((oldZoom + change) * 10) / 10;
+    if (newZoom < MIN_ZOOM) {
+        newZoom = MIN_ZOOM;
+    }
+    if (newZoom > MAX_ZOOM) {
+        newZoom = MAX_ZOOM;
+    }
+
+    // point of the map that is in the middle of the viewport
+    const centerX = viewport.clientWidth / 2;
+    const centerY = viewport.clientHeight / 2;
+    view.x = centerX - (centerX - view.x) * (newZoom / oldZoom);
+    view.y = centerY - (centerY - view.y) * (newZoom / oldZoom);
+    view.zoom = newZoom;
+
+    applyView();
+}
+
+document.getElementById("zoomInBtn").addEventListener("click", function () {
+    zoomMap(ZOOM_STEP);
+});
+
+document.getElementById("zoomOutBtn").addEventListener("click", function () {
+    zoomMap(-ZOOM_STEP);
+});
+
 renderPriceLegend();
 renderSeatMap();
+applyView();
