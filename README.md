@@ -53,6 +53,17 @@ seats at the ends of a row are a bit closer to the stage than the middle seats.
 - **In cart** – already added to the cart
 - **Unavailable** – already sold, cannot be added
 
+## How the seat map is generated
+
+The venue is described in `js/venue-data.js` (sections, rows, seats per row,
+category and the list of sold seats). `createSeatList()` turns this into one
+object per seat, and `renderSeatMap()` in `js/app.js` loops over the sections
+and rows and creates a `<button>` for every seat. Each seat is moved up a little
+with `getCurveOffset()`, so the rows are curved around the stage.
+
+Clicking a seat only **inspects** it: the details and price are shown in the
+side panel. The ADD TO CART button is only enabled for available seats.
+
 ## Project structure
 
 ```
@@ -74,3 +85,10 @@ No build step needed. Open `index.html` in a browser
 - **Week 2** – generate the seat map from data, seat states, seat inspection.
 - **Week 3** – zoom/move/reset controls, cart, totals, localStorage.
 - **Week 4** – responsiveness, edge cases, testing, polish, mouse navigation bonus.
+
+## Progress
+
+- [x] Week 1 – venue design, page structure, styles, data model
+- [x] Week 2 – seat map generated from data, curved rows, seat states, seat inspection
+- [ ] Week 3 – map navigation, cart, localStorage
+- [ ] Week 4 – final polish and bonus
