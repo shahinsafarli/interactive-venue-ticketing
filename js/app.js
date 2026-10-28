@@ -210,9 +210,26 @@ const view = {
 const MIN_ZOOM = 0.3;
 const MAX_ZOOM = 2;
 const ZOOM_STEP = 0.2;
+const MOVE_STEP = 80;
+
+// Keeps at least a part of the map inside the viewport, so it cannot get lost
+function keepMapInView() {
+    const viewport = document.getElementById("mapViewport");
+    const mapContent = document.getElementById("mapContent");
+    const mapWidth = mapContent.offsetWidth * view.zoom;
+    const mapHeight = mapContent.offsetHeight * view.zoom;
+    const margin = 100;
+
+    view.x = Math.min(view.x, viewport.clientWidth - margin);
+    view.x = Math.max(view.x, margin - mapWidth);
+    view.y = Math.min(view.y, viewport.clientHeight - margin);
+    view.y = Math.max(view.y, margin - mapHeight);
+}
 
 // Moves and scales the map content to match the current view
 function applyView() {
+    keepMapInView();
+
     const mapContent = document.getElementById("mapContent");
     mapContent.style.transform = "translate(" + view.x + "px, " + view.y + "px) scale(" + view.zoom + ")";
 
@@ -244,6 +261,31 @@ function zoomMap(change) {
     applyView();
 }
 
+// Moves the view over the map. "Move Up" shows the part of the map above,
+// so the map itself goes down (and the same for the other directions).
+function moveMap(dx, dy) {
+    view.x += dx;
+    view.y += dy;
+    applyView();
+}
+
+// Fits the whole venue into the viewport and puts it in the middle
+function resetView() {
+    const viewport = document.getElementById("mapViewport");
+    const mapContent = document.getElementById("mapContent");
+
+    const zoomToFitWidth = viewport.clientWidth / mapContent.offsetWidth;
+    const zoomToFitHeight = viewport.clientHeight / mapContent.offsetHeight;
+    view.zoom = Math.min(zoomToFitWidth, zoomToFitHeight, 1);
+    if (view.zoom < MIN_ZOOM) {
+        view.zoom = MIN_ZOOM;
+    }
+
+    view.x = (viewport.clientWidth - mapContent.offsetWidth * view.zoom) / 2;
+    view.y = (viewport.clientHeight - mapContent.offsetHeight * view.zoom) / 2;
+    applyView();
+}
+
 document.getElementById("zoomInBtn").addEventListener("click", function () {
     zoomMap(ZOOM_STEP);
 });
@@ -252,6 +294,26 @@ document.getElementById("zoomOutBtn").addEventListener("click", function () {
     zoomMap(-ZOOM_STEP);
 });
 
+document.getElementById("moveUpBtn").addEventListener("click", function () {
+    moveMap(0, MOVE_STEP);
+});
+
+document.getElementById("moveDownBtn").addEventListener("click", function () {
+    moveMap(0, -MOVE_STEP);
+});
+
+document.getElementById("moveLeftBtn").addEventListener("click", function () {
+    moveMap(MOVE_STEP, 0);
+});
+
+document.getElementById("moveRightBtn").addEventListener("click", function () {
+    moveMap(-MOVE_STEP, 0);
+});
+
+document.getElementById("resetViewBtn").addEventListener("click", resetView);
+
 renderPriceLegend();
 renderSeatMap();
-applyView();
+
+// the page starts with the whole venue visible
+resetView();
