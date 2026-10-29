@@ -9,6 +9,9 @@ const seatButtons = {};
 // Id of the seat that is currently inspected (null = no seat selected)
 let inspectedSeatId = null;
 
+// Ids of the seats in the cart, for example ["A-5", "F-10"]
+let cart = [];
+
 // Text shown for each seat state
 const stateNames = {
     "available": "Available",
@@ -74,10 +77,13 @@ function createSeatButton(seat, seatsPerRow) {
     return button;
 }
 
-// Returns the state of a seat: "available" or "unavailable"
+// Returns the state of a seat: "available", "in-cart" or "unavailable"
 function getSeatState(seat) {
     if (seat.unavailable) {
         return "unavailable";
+    }
+    if (cart.includes(seat.id)) {
+        return "in-cart";
     }
     return "available";
 }
@@ -135,14 +141,37 @@ function showSeatDetails(seat) {
     // ADD TO CART only works for available seats
     const addButton = document.getElementById("addToCartBtn");
     const message = document.getElementById("detailsMessage");
+    const state = getSeatState(seat);
 
-    if (getSeatState(seat) === "available") {
+    if (state === "available") {
         addButton.disabled = false;
         message.textContent = "";
+    } else if (state === "in-cart") {
+        addButton.disabled = true;
+        message.textContent = "This seat is already in your cart.";
     } else {
         addButton.disabled = true;
         message.textContent = "This seat is already sold and cannot be added to the cart.";
     }
+}
+
+// Adds the inspected seat to the cart (only if it is available and not in the cart yet)
+function addToCart() {
+    if (inspectedSeatId === null) {
+        return;
+    }
+
+    const seat = findSeat(inspectedSeatId);
+    if (getSeatState(seat) !== "available") {
+        // sold seats and seats already in the cart cannot be added
+        showSeatDetails(seat);
+        return;
+    }
+
+    cart.push(seat.id);
+    updateSeatButton(seat);
+    showSeatDetails(seat);
+    document.getElementById("detailsMessage").textContent = "Row " + seat.row + ", seat " + seat.number + " was added to your cart.";
 }
 
 // Empties the seat details panel when no seat is inspected
@@ -311,6 +340,8 @@ document.getElementById("moveRightBtn").addEventListener("click", function () {
 });
 
 document.getElementById("resetViewBtn").addEventListener("click", resetView);
+
+document.getElementById("addToCartBtn").addEventListener("click", addToCart);
 
 renderPriceLegend();
 renderSeatMap();
