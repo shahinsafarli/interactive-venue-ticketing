@@ -171,7 +171,62 @@ function addToCart() {
     cart.push(seat.id);
     updateSeatButton(seat);
     showSeatDetails(seat);
+    renderCart();
     document.getElementById("detailsMessage").textContent = "Row " + seat.row + ", seat " + seat.number + " was added to your cart.";
+}
+
+// Removes a seat from the cart and makes it available again on the map
+function removeFromCart(seatId) {
+    cart = cart.filter(function (id) {
+        return id !== seatId;
+    });
+
+    updateSeatButton(findSeat(seatId));
+    renderCart();
+
+    // if this seat is open in the details panel, update the panel too
+    if (inspectedSeatId === seatId) {
+        showSeatDetails(findSeat(seatId));
+    }
+}
+
+// Shows the cart: one line for each ticket with its price and a Remove button, and the total
+function renderCart() {
+    const cartList = document.getElementById("cartList");
+    cartList.innerHTML = "";
+    let total = 0;
+
+    cart.forEach(function (seatId) {
+        const seat = findSeat(seatId);
+        const section = getSection(seat.sectionId);
+        const price = getCategory(seat.category).price;
+        total = total + price;
+
+        const item = document.createElement("li");
+        item.className = "cart-item";
+
+        const text = document.createElement("span");
+        text.textContent = section.name + " – Row " + seat.row + ", Seat " + seat.number;
+
+        const priceText = document.createElement("strong");
+        priceText.textContent = formatPrice(price);
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "remove-btn";
+        removeButton.textContent = "Remove";
+        removeButton.addEventListener("click", function () {
+            removeFromCart(seatId);
+        });
+
+        item.appendChild(text);
+        item.appendChild(priceText);
+        item.appendChild(removeButton);
+        cartList.appendChild(item);
+    });
+
+    document.getElementById("cartEmpty").hidden = cart.length > 0;
+    document.getElementById("cartTotal").textContent = formatPrice(total);
 }
 
 // Empties the seat details panel when no seat is inspected

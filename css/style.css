@@ -360,6 +360,30 @@ button:focus-visible {
     margin: 0 0 12px;
 }
 
+.cart-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 0.9rem;
+}
+
+.remove-btn {
+    padding: 4px 8px;
+    border: 1px solid var(--primary);
+    border-radius: 4px;
+    background-color: #ffffff;
+    color: var(--primary);
+    font-size: 0.8rem;
+}
+
+.remove-btn:hover {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+
 .cart-total {
     margin: 0;
     padding-top: 12px;
