@@ -169,6 +169,7 @@ function addToCart() {
     }
 
     cart.push(seat.id);
+    saveCart();
     updateSeatButton(seat);
     showSeatDetails(seat);
     renderCart();
@@ -181,12 +182,26 @@ function removeFromCart(seatId) {
         return id !== seatId;
     });
 
+    saveCart();
     updateSeatButton(findSeat(seatId));
     renderCart();
 
     // if this seat is open in the details panel, update the panel too
     if (inspectedSeatId === seatId) {
         showSeatDetails(findSeat(seatId));
+    }
+}
+
+// Saves the cart in localStorage, so it is still there after a page refresh
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// Loads the saved cart from localStorage (if there is one)
+function loadCart() {
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart !== null) {
+        cart = JSON.parse(savedCart);
     }
 }
 
@@ -398,8 +413,11 @@ document.getElementById("resetViewBtn").addEventListener("click", resetView);
 
 document.getElementById("addToCartBtn").addEventListener("click", addToCart);
 
+// the saved cart is loaded before the map is built, so the seats get the right state
+loadCart();
 renderPriceLegend();
 renderSeatMap();
+renderCart();
 
 // the page starts with the whole venue visible
 resetView();
