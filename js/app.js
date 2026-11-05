@@ -197,12 +197,35 @@ function saveCart() {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// Loads the saved cart from localStorage (if there is one)
+// Loads the saved cart from localStorage (if there is one).
+// The saved data could be broken or old, so only correct seats are loaded.
 function loadCart() {
     const savedCart = localStorage.getItem("cart");
-    if (savedCart !== null) {
-        cart = JSON.parse(savedCart);
+    if (savedCart === null) {
+        return;
     }
+
+    let savedIds = [];
+    try {
+        savedIds = JSON.parse(savedCart);
+    } catch (error) {
+        savedIds = [];
+    }
+    if (!Array.isArray(savedIds)) {
+        savedIds = [];
+    }
+
+    // only keep seats that exist, are not sold and are not in the list twice
+    cart = [];
+    savedIds.forEach(function (seatId) {
+        const seat = findSeat(seatId);
+        if (seat && !seat.unavailable && !cart.includes(seatId)) {
+            cart.push(seatId);
+        }
+    });
+
+    // save the cleaned cart, so the wrong data is gone
+    saveCart();
 }
 
 // Shows the cart: one line for each ticket with its price and a Remove button, and the total
