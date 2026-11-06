@@ -360,8 +360,9 @@ function applyView() {
     document.getElementById("zoomOutBtn").disabled = view.zoom <= MIN_ZOOM;
 }
 
-// Changes the zoom by the given amount and keeps the middle of the viewport in place
-function zoomMap(change) {
+// Changes the zoom by the given amount. The point (pointX, pointY) of the viewport stays
+// in place: the buttons use the middle of the viewport, the mouse wheel uses the mouse pointer.
+function zoomMap(change, pointX, pointY) {
     const viewport = document.getElementById("mapViewport");
     const oldZoom = view.zoom;
 
@@ -373,11 +374,13 @@ function zoomMap(change) {
         newZoom = MAX_ZOOM;
     }
 
-    // point of the map that is in the middle of the viewport
-    const centerX = viewport.clientWidth / 2;
-    const centerY = viewport.clientHeight / 2;
-    view.x = centerX - (centerX - view.x) * (newZoom / oldZoom);
-    view.y = centerY - (centerY - view.y) * (newZoom / oldZoom);
+    if (pointX === undefined) {
+        pointX = viewport.clientWidth / 2;
+        pointY = viewport.clientHeight / 2;
+    }
+
+    view.x = pointX - (pointX - view.x) * (newZoom / oldZoom);
+    view.y = pointY - (pointY - view.y) * (newZoom / oldZoom);
     view.zoom = newZoom;
 
     applyView();
@@ -433,6 +436,22 @@ document.getElementById("moveRightBtn").addEventListener("click", function () {
 });
 
 document.getElementById("resetViewBtn").addEventListener("click", resetView);
+
+// Bonus: zoom with the mouse wheel towards the mouse pointer
+document.getElementById("mapViewport").addEventListener("wheel", function (event) {
+    // stop the page from scrolling while zooming the map
+    event.preventDefault();
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    if (event.deltaY < 0) {
+        zoomMap(0.1, mouseX, mouseY);
+    } else {
+        zoomMap(-0.1, mouseX, mouseY);
+    }
+}, { passive: false });
 
 document.getElementById("addToCartBtn").addEventListener("click", addToCart);
 
