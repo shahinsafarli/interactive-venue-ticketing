@@ -36,21 +36,9 @@
                     </div>
                 </div>
             </div>
-
-            <div class="legend">
-                <h2>Legend</h2>
-                <ul class="legend-list">
-                    <li><span class="legend-box state-available"></span> Available</li>
-                    <li><span class="legend-box state-inspected"></span> Inspected</li>
-                    <li><span class="legend-box state-in-cart"></span> In cart</li>
-                    <li><span class="legend-box state-unavailable"></span> Unavailable</li>
-                </ul>
-                <h3>Price categories</h3>
-                <ul class="legend-list" id="priceLegend"></ul>
-            </div>
         </section>
 
-        <!-- Seat details and cart -->
+        <!-- Seat details, cart and legend -->
         <aside class="side-panel">
             <section class="panel seat-details" id="seatDetails">
                 <h2>Seat details</h2>
@@ -78,6 +66,19 @@
                 <p class="placeholder" id="cartEmpty">Your cart is empty.</p>
                 <ul class="cart-list" id="cartList"></ul>
                 <p class="cart-total">Total: <strong id="cartTotal">€0</strong></p>
+            </section>
+
+            <!-- the legend is in the side panel, so on phones the seat details come right after the map -->
+            <section class="panel legend">
+                <h2>Legend</h2>
+                <ul class="legend-list">
+                    <li><span class="legend-box state-available"></span> Available</li>
+                    <li><span class="legend-box state-inspected"></span> Inspected</li>
+                    <li><span class="legend-box state-in-cart"></span> In cart</li>
+                    <li><span class="legend-box state-unavailable"></span> Unavailable</li>
+                </ul>
+                <h3>Price categories</h3>
+                <ul class="legend-list" id="priceLegend"></ul>
             </section>
         </aside>
     </main>

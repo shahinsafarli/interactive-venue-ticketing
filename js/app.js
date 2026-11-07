@@ -437,6 +437,9 @@ document.getElementById("moveRightBtn").addEventListener("click", function () {
 
 document.getElementById("resetViewBtn").addEventListener("click", resetView);
 
+// when the window size changes (for example turning a phone), keep the map inside the viewport
+window.addEventListener("resize", applyView);
+
 // Bonus: zoom with the mouse wheel towards the mouse pointer
 document.getElementById("mapViewport").addEventListener("wheel", function (event) {
     // stop the page from scrolling while zooming the map
