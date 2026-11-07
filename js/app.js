@@ -453,6 +453,63 @@ document.getElementById("mapViewport").addEventListener("wheel", function (event
     }
 }, { passive: false });
 
+// Bonus: move the map by holding the left mouse button and dragging
+const drag = {
+    active: false,
+    moved: false,
+    startX: 0,
+    startY: 0,
+    viewX: 0,
+    viewY: 0
+};
+
+document.getElementById("mapViewport").addEventListener("mousedown", function (event) {
+    if (event.button !== 0) {
+        return;
+    }
+    drag.active = true;
+    drag.moved = false;
+    drag.startX = event.clientX;
+    drag.startY = event.clientY;
+    drag.viewX = view.x;
+    drag.viewY = view.y;
+    event.currentTarget.classList.add("dragging");
+});
+
+window.addEventListener("mousemove", function (event) {
+    if (!drag.active) {
+        return;
+    }
+
+    const dx = event.clientX - drag.startX;
+    const dy = event.clientY - drag.startY;
+
+    // small mouse movements during a normal click do not count as dragging
+    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        drag.moved = true;
+    }
+
+    if (drag.moved) {
+        view.x = drag.viewX + dx;
+        view.y = drag.viewY + dy;
+        applyView();
+    }
+});
+
+window.addEventListener("mouseup", function () {
+    drag.active = false;
+    document.getElementById("mapViewport").classList.remove("dragging");
+});
+
+// After a drag the browser still sends a click. This stops that click,
+// so a seat is not inspected by accident when the drag ends on a seat.
+document.getElementById("mapViewport").addEventListener("click", function (event) {
+    if (drag.moved) {
+        event.stopPropagation();
+        drag.moved = false;
+    }
+}, true);
+
 document.getElementById("addToCartBtn").addEventListener("click", addToCart);
 
 // the saved cart is loaded before the map is built, so the seats get the right state

@@ -121,6 +121,18 @@ button:disabled {
     border: 1px solid var(--border);
     border-radius: 6px;
     background-color: #fbfaf8;
+    /* the map can be dragged with the mouse */
+    cursor: grab;
+    user-select: none;
+}
+
+.map-viewport.dragging {
+    cursor: grabbing;
+}
+
+/* no animation while dragging, otherwise the map moves behind the mouse */
+.map-viewport.dragging .map-content {
+    transition: none;
 }
 
 .map-content {
