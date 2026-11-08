@@ -64,6 +64,48 @@ with `getCurveOffset()`, so the rows are curved around the stage.
 Clicking a seat only **inspects** it: the details and price are shown in the
 side panel. The ADD TO CART button is only enabled for available seats.
 
+## How to use
+
+1. Click a seat on the map. Its section, row, seat number, category, price and
+   status are shown in **Seat details**. Click the same seat again to deselect it.
+2. Press **ADD TO CART** to add the ticket. A seat can only be in the cart once,
+   and sold seats cannot be added.
+3. The cart shows every ticket with its price and the total. **Remove** takes a
+   ticket out of the cart and the seat becomes available on the map again.
+
+### Map controls
+
+| Control                 | What it does                                          |
+|-------------------------|-------------------------------------------------------|
+| Zoom In + / Zoom Out −  | Zoom between 0.3x and 2x (buttons are disabled at the limits) |
+| ↑ Up / ↓ Down / ← Left / → Right | Move the view over the map                   |
+| Reset View              | Fit the whole venue in the map area and center it     |
+| Mouse wheel (bonus)     | Zoom in and out towards the mouse pointer             |
+| Click and drag (bonus)  | Move the map with the mouse                           |
+
+The map cannot be moved completely out of the map area. A small mouse movement
+during a click does not count as a drag, and a drag does not select a seat.
+
+### Saving the cart
+
+The cart is saved in `localStorage` every time a ticket is added or removed.
+After a page refresh the cart and the in-cart seats on the map are restored.
+If the saved data is broken, or contains a seat that does not exist or is sold,
+those seats are ignored.
+
+## Testing
+
+Tested in Chrome on desktop, tablet (768px) and phone (375px) widths.
+
+- [x] Click a seat: details appear, the cart does not change until ADD TO CART
+- [x] Add a seat, try to add it again: no duplicate ticket
+- [x] Remove a ticket: the seat changes on the map immediately
+- [x] Refresh the page: cart items and seat states are restored
+- [x] Try a sold seat: it cannot be added
+- [x] All map buttons and Reset View work, zoom stops at the limits
+- [x] Mouse wheel zoom and drag panning work, the buttons still work too
+- [x] Layout works on desktop, tablet and phone widths
+
 ## Project structure
 
 ```
@@ -90,5 +132,5 @@ No build step needed. Open `index.html` in a browser
 
 - [x] Week 1 – venue design, page structure, styles, data model
 - [x] Week 2 – seat map generated from data, curved rows, seat states, seat inspection
-- [ ] Week 3 – map navigation, cart, localStorage
-- [ ] Week 4 – final polish and bonus
+- [x] Week 3 – map navigation, cart, localStorage
+- [x] Week 4 – saved data checks, responsive layout, mouse wheel zoom and drag panning (bonus)
